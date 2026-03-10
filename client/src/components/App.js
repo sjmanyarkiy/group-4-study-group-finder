@@ -7,6 +7,22 @@ import Navbar from "./Navbar"
 
 
 function App() {
+  const [ user, setUser ] = useState(null);
+
+  useEffect(() => {
+    fetch("/check_session").then((res) => {
+      if (res.ok) {
+        res.json().then((data) => setUser(data));
+      }
+    });
+  }, []);
+
+  const handleLogin = (userData) => setUser(userData);
+  const handleLogout = () => {
+    fetch("/logout", { method : "DELETE" })
+    .then(() => setUser(null))
+  };
+
   return (
     <div>
       <Navbar user={user} onLogout={handleLogout} />
