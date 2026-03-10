@@ -17,7 +17,7 @@ class User(db.model):
     phone_number = db.Column(db.Integer)
     user_category = db.Column(db.String)
     _password_hash = db.Column(db.String)
-
+        
     @validates('user_category')
 
     @validates('email')
@@ -25,8 +25,6 @@ class User(db.model):
         if '@' not in value:
             raise ValueError('Invalid email address')
         return value
-        
-
 
     def to_dict(self):
         return {
