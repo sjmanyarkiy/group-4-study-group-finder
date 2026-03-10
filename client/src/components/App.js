@@ -8,16 +8,16 @@ import Login from "./Login";
 function App() {
   return (
     <div>
-      <Navbar user={user} onLogout={handleLogout} />
+      <Navbar  />
       <Switch>
         <Route>
-          <Home user={user}/>
+          <Home />
         </Route>
         <Route>
-          <Login onLogin={handleLogin}/>
+          <Login />
         </Route>
         <Route>
-          <Register onLogout={handleLogin}/>
+          <Register />
         </Route>
       </Switch>
     </div>
