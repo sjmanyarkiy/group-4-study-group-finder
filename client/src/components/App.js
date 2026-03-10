@@ -11,13 +11,13 @@ function App() {
       <Navbar user={user} onLogout={handleLogout} />
       <Switch>
         <Route>
-          <Home />
+          <Home user={user}/>
         </Route>
         <Route>
-          <Login />
+          <Login onLogin={handleLogin}/>
         </Route>
         <Route>
-          <Register />
+          <Register onLogout={handleLogin}/>
         </Route>
       </Switch>
     </div>
