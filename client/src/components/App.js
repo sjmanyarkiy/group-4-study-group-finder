@@ -1,8 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
+import Home from "./Home"
+import Register from "./Register";
+import Login from "./Login";
+
 
 function App() {
-  return <h1>Project Client</h1>;
+  return (
+    <div>
+      <Navbar user={user} onLogout={handleLogout} />
+      <Switch>
+        <Route>
+          <Home />
+        </Route>
+        <Route>
+          <Login />
+        </Route>
+        <Route>
+          <Register />
+        </Route>
+      </Switch>
+    </div>
+  )
 }
 
 export default App;
