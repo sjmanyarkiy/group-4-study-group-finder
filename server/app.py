@@ -34,7 +34,15 @@ class Register(Resource):
             return {'error': str(e)}, 422
         
 
+class Login(Resource):
+    def post(self):
+        data = request.get_json()
+        user = User.query.filter_by(email=data['email']).first()
 
+        if user and user.authenticate(data['password']):
+            session['user_id'] = user.id
+            return user.to_dict(), 200
+        return {'error' : 'Invalid email or password'}, 401
 
 
 # Views go here!
