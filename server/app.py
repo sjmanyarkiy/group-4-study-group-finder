@@ -56,8 +56,10 @@ class CheckSession(Resource):
             return user.get_dict(), 200
         return {'error' : 'Not logged in'}, 401
     
-
-
+api.add_resource(Register, '/register')
+api.add_resource(Login, '/login')
+api.add_resource(Logout, '/logout')
+api.add_resource(CheckSession, '/check_session')
 
 # Views go here!
 
