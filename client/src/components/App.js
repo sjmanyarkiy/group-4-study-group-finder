@@ -3,21 +3,22 @@ import { Switch, Route } from "react-router-dom";
 import Home from "./Home"
 import Register from "./Register";
 import Login from "./Login";
+import Navbar from "./Navbar"
 
 
 function App() {
   return (
     <div>
-      <Navbar  />
+      <Navbar user={user} onLogout={handleLogout} />
       <Switch>
         <Route>
-          <Home />
+          <Home user={user}/>
         </Route>
         <Route>
-          <Login />
+          <Login onLogin={handleLogin}/>
         </Route>
         <Route>
-          <Register />
+          <Register onLogout={handleLogin}/>
         </Route>
       </Switch>
     </div>

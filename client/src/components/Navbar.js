@@ -1,5 +1,5 @@
-import React from react;
-import { Link } from react-router-dom;
+import React from "react";
+import { Link } from "react-router-dom";
 
 
 function Navbar({ user, onLogout}){
@@ -25,3 +25,5 @@ function Navbar({ user, onLogout}){
         </nav>
     )
 }
+
+export default Navbar;
