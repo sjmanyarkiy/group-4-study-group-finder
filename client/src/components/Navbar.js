@@ -12,7 +12,7 @@ function Navbar({ user, onLogout}){
                 <Link to="/">Home</Link>
                 ( user ? (
                     <>
-                        <span> Hello, {user.name}</span>
+                        <span >Hi, {user?.name?.split(" ")[0]}!</span>
                         <button onClick={onLogout} >Logout</button>
                     </>
                 )) : (

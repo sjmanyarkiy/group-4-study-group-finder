@@ -11,7 +11,7 @@ function Register({ onLogin }) {
         name: yup.string().required("Must enter a name"),
         dob: yup.string().required("Must enter date of birth"),
         email: yup.string().email("Invalid email").required("Must enter email"),
-        national_id: yup.string().required("Must enter National ID").min("National ID must be at least 8 characters"),
+        national_id: yup.string().required("Must enter National ID").min(8, "National ID must be at least 8 characters"),
         phone_number: yup.string().required("Must enter a phone number").matches(/^0[0-9]{9}$/, "Phone number must be 10 digits starting with 0"),
         user_category: yup.string().oneOf(["student", "lecturer"], "Please select a valid category").required("Must select a category"),
         password: yup.string().required("Must enter a password").min(6, "Password must be at least 6 characters"),
@@ -25,7 +25,7 @@ function Register({ onLogin }) {
             national_id: "",
             phone_number: "",
             user_category: "",
-            password: ","
+            password: ""
         },
         validationSchema: formSchema,
         onSubmit: (values) => {

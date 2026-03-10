@@ -27,14 +27,14 @@ function App() {
     <div>
       <Navbar user={user} onLogout={handleLogout} />
       <Switch>
-        <Route>
+        <Route exact path="/">
           <Home user={user}/>
         </Route>
-        <Route>
+        <Route path="/login">
           <Login onLogin={handleLogin}/>
         </Route>
-        <Route>
-          <Register onLogout={handleLogin}/>
+        <Route path="/register">
+          <Register onLogin={handleLogin}/>
         </Route>
       </Switch>
     </div>
