@@ -53,7 +53,7 @@ class CheckSession(Resource):
     def get(self):
         user = User.query.get(session.get('user_id'))
         if user:
-            return user.get_dict(), 200
+            return user.to_dict(), 200
         return {'error' : 'Not logged in'}, 401
     
 api.add_resource(Register, '/register')
