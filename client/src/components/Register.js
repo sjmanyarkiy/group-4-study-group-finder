@@ -51,9 +51,9 @@ function Register({ onLogin }) {
     });
 
     return (
-        <div>
+        <div style={styles.container}>
             <h2>Create Account</h2>
-            <form onSubmit={formik.handleSubmit}>
+            <form onSubmit={formik.handleSubmit} style={styles.form}>
 
                 <label htmlFor="name">Full Name</label>
                 <input 
@@ -61,8 +61,9 @@ function Register({ onLogin }) {
                     name="name"
                     onChange={formik.handleChange}
                     value={formik.values.name}
+                    style={styles.input}
                 />
-                <p>{formik.errors.name}</p>
+                <p style={styles.error}>{formik.errors.name}</p>
 
                 <label htmlFor="dob">Date of Birth</label>
                 <input 
@@ -71,8 +72,9 @@ function Register({ onLogin }) {
                     type="date"
                     onChange={formik.handleChange}
                     value={formik.values.dob}
+                    style={styles.input}
                 />
-                <p>{formik.errors.dob}</p>
+                <p style={styles.error}>{formik.errors.dob}</p>
 
                 <label htmlFor="email">Email Address</label>
                 <input 
@@ -80,8 +82,9 @@ function Register({ onLogin }) {
                     name = "email"
                     onChange={formik.handleChange}
                     value={formik.values.email}
+                    style={styles.input}
                 />
-                <p>{formik.errors.email}</p>
+                <p style={styles.error}>{formik.errors.email}</p>
 
                 <label htmlFor="national_id">National ID</label>
                 <input 
@@ -89,8 +92,9 @@ function Register({ onLogin }) {
                     name = "national_id"
                     onChange={formik.handleChange}
                     value={formik.values.national_id}
+                    style={styles.input}
                 />
-                <p>{formik.errors.national_id}</p>
+                <p style={styles.error}>{formik.errors.national_id}</p>
 
                 <label htmlFor="phone_number">Phone Number</label>
                 <input 
@@ -98,8 +102,9 @@ function Register({ onLogin }) {
                     name = "phone_number"
                     onChange={formik.handleChange}
                     value={formik.values.phone_number}
+                    style={styles.input}
                 />
-                <p>{formik.errors.phone_number}</p>
+                <p style={styles.error}>{formik.errors.phone_number}</p>
 
                 <label htmlFor="user_category">Category</label>
                 <select 
@@ -107,12 +112,13 @@ function Register({ onLogin }) {
                     name = "user_category"
                     onChange={formik.handleChange}
                     value={formik.values.user_category}
+                    style={styles.input}
                 >
                     <option value="">Select a category</option>
                     <option value="student">Student</option>
                     <option value="lecturer">Lecturer</option>
                 </select>
-                <p>{formik.errors.user_category}</p>
+                <p style={styles.error}>{formik.errors.user_category}</p>
 
                 <label htmlFor="password">Password</label>
                 <input
@@ -121,17 +127,56 @@ function Register({ onLogin }) {
                     type="password"
                     onChange={formik.handleChange}
                     value={formik.values.password}
+                    style={styles.input}
                 />
-                <p>{formik.errors.password}</p>
+                <p style={styles.error}>{formik.errors.password}</p>
 
-                <button type="submit">Register</button>
+                <button type="submit" style={styles.button}>Register</button>
 
             </form>
         </div>
-    )
+    );
 
 
 
 }
+
+const styles = {
+  container: {
+    maxWidth: "480px",
+    margin: "40px auto",
+    padding: "24px",
+    border: "1px solid #ddd",
+    borderRadius: "8px",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  input: {
+    padding: "8px",
+    marginTop: "4px",
+    marginBottom: "2px",
+    borderRadius: "4px",
+    border: "1px solid #ccc",
+    fontSize: "14px",
+  },
+  error: {
+    color: "red",
+    fontSize: "12px",
+    marginBottom: "8px",
+    minHeight: "16px",
+  },
+  button: {
+    marginTop: "12px",
+    padding: "10px",
+    backgroundColor: "#2E4057",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    fontSize: "16px",
+    cursor: "pointer",
+  },
+};
 
 export default Register
