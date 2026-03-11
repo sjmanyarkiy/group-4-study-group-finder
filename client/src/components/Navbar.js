@@ -1,25 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Navbar({ user, onLogout}){
+function Navbar({ user, onLogout }){
     return (
         <nav style={styles.nav}>
             <div style={styles.brand}>
-                <Link to="/" style={styles.brandlink}>LetsStudy!</Link>
+                <Link to="/" style={styles.brandLink}>LetsStudy!</Link>
             </div>
-            <div>
+            <div style={styles.links}>
                 <Link to="/" style={styles.link}>Home</Link>
-                ( user ? (
+                { user ? (
                     <>
                         <span style={styles.welcome}>Hi, {user?.name?.split(" ")[0]}!</span>
                         <button onClick={onLogout} style={styles.button}>Logout</button>
                     </>
-                )) : (
+                ) : (
                     <>
                         <Link to="/login" style={styles.link}>Log In</Link>
                         <Link to="/register" style={styles.link}>Register</Link>
                     </>
-                )
+                )}
             </div>
         </nav>
     );
