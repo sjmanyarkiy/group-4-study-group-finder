@@ -1,70 +1,147 @@
-# Getting Started with Create React App
+# LetsStudy 📚
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack web application that connects students and lecturers through study groups. Users can join groups, access course content, and review their learning experience.
 
-## Available Scripts
+Built with a **Flask** backend and a **React** frontend.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## Team Members
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+| Name | Branch | Responsibility |
+|------|--------|----------------|
+| Sandra | `sandra` | User model, authentication, integration lead |
+| Ajok | `ajok` | StudyGroup model, institutions |
+| Benson | `benson` | Membership model, joining flow |
+| Samuel | `samuel` | Course model, reviews, admin content |
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+---
 
-### `npm test`
+## Models & Relationships
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Models
+- **User** — students and lecturers
+- **StudyGroup** — groups users can join
+- **Membership** — association between users and study groups
+- **Institution** — schools and organisations
+- **Course** — courses linked to study groups
+- **Review** — star ratings left by users
 
-### `npm run build`
+### Relationships
+- `StudyGroup` → `User` (many-to-one)
+- `StudyGroup` → `Membership` (one-to-many)
+- `StudyGroup` ↔ `Institution` (many-to-many)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## API Routes
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Authentication
+| Method | Route | Description |
+|--------|-------|-------------|
+| POST | `/register` | Register a new user |
+| POST | `/login` | Log in an existing user |
+| DELETE | `/logout` | Log out the current user |
+| GET | `/check_session` | Check if a user is logged in |
 
-### `npm run eject`
+### Study Groups
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/study_groups` | Get all study groups |
+| POST | `/study_groups` | Create a new study group (lecturer only) |
+| GET | `/study_groups/<id>` | Get a single study group |
+| PATCH | `/study_groups/<id>` | Update a study group |
+| DELETE | `/study_groups/<id>` | Delete a study group |
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Memberships
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/memberships` | Get all memberships |
+| POST | `/memberships` | Join a study group |
+| DELETE | `/memberships/<id>` | Leave a study group |
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Institutions
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/institutions` | Get all institutions |
+| POST | `/institutions` | Add a new institution |
+| PATCH | `/institutions/<id>` | Update an institution |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Courses & Reviews
+| Method | Route | Description |
+|--------|-------|-------------|
+| GET | `/courses` | Get all courses |
+| POST | `/courses` | Create a course |
+| GET | `/reviews` | Get all reviews |
+| POST | `/reviews` | Post a review |
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+---
 
-## Learn More
+## Setup Instructions
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Prerequisites
+- Python 3.8+
+- Node.js 16+
+- Pipenv
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+### Backend Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+# Install dependencies
+pipenv install
+pipenv shell
 
-### Analyzing the Bundle Size
+# Move into the server directory
+cd server
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+# Set up the database
+flask db init
+flask db migrate -m "initial migration"
+flask db upgrade
 
-### Making a Progressive Web App
+# Seed the database
+python seed.py
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+# Run the Flask server
+python app.py
+```
 
-### Advanced Configuration
+The Flask API will run on **http://localhost:5555**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+### Frontend Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```bash
+# Install dependencies
+npm install --prefix client
 
-### `npm run build` fails to minify
+# Start the React app
+npm start --prefix client
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The React app will run on **http://localhost:3000**
+
+---
+
+## Client-Side Routes
+
+| Route | Description |
+|-------|-------------|
+| `/` | Home page |
+| `/login` | Login page |
+| `/register` | Registration page |
+| `/groups` | Browse study groups |
+
+---
+
+## Features
+
+- Student and lecturer login with session-based authentication
+- Registration form with full validation via Formik and Yup
+- Study group browsing and joining with membership tiers (Standard 500sh, Premium 1000sh)
+- Institution dropdown — lecturers can add and edit institutions
+- Star reviews for study groups
+- Admin/Lecturer controls for creating groups and content
