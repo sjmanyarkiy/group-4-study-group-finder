@@ -8,7 +8,19 @@ from flask_restful import Resource
 
 # Local imports
 from config import app, db, api
-# Add your model imports
+# Import models so SQLAlchemy registers them
+import models
+from routes.courses import (
+    CourseListResource,
+    CourseResource,
+    CourseStudyGroupResource,
+)
+
+
+# Register API resources
+api.add_resource(CourseListResource, '/courses')
+api.add_resource(CourseResource, '/courses/<int:course_id>')
+api.add_resource(CourseStudyGroupResource, '/courses/<int:course_id>/study-groups')
 
 
 # Views go here!
@@ -20,4 +32,3 @@ def index():
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
-
