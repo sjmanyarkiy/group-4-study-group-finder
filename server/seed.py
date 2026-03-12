@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from app import app
+from api.app import app
 from config import db
 from models import User, StudyGroup, Membership, Course, Review, Institution
 from datetime import datetime
