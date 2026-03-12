@@ -49,7 +49,7 @@ class User(db.Model):
 
     def to_dict(self):
         return {
-            'id' : self.id,
+            'user_id' : self.user_id,
             'name' : self.name,
             'dob' : self.dob,
             'email' : self.email,
@@ -61,6 +61,8 @@ class User(db.Model):
 
 class Membership(db.Model, SerializerMixin):
     __tablename__ = "memberships"
+
+    serialize_rules = ('-user.memberships', '-study_group.memberships')
 
     membership_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -74,4 +76,33 @@ class Membership(db.Model, SerializerMixin):
 
     user = db.relationship("User", back_populates="memberships")
     study_group = db.relationship("StudyGroup", back_populates="memberships")
+
+    @validates('tier')
+    def validate_tier(self, key, value):
+        if value not in ['bronze', 'silver', 'gold']:
+            raise ValueError('Tier must be bronze, silver, or gold')
+        return value
     
+# Study Group Model
+
+class StudyGroup(db.Model, SerializerMixin):
+    __tablename__ = 'study_groups'
+
+    serialize_rules = ('-memberships.study_group', '-memberships.user._password_hash')
+
+    study_group_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(255))
+    subject = db.Column(db.String(100))
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    memberships = db.relationship("Membership", back_populates="study_group")
+
+    def to_dict(self):
+        return {
+            'study_group_id': self.study_group_id,
+            'name': self.name,
+            'description': self.description,
+            'subject': self.subject,
+            'created_at': str(self.created_at)
+        }

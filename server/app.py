@@ -9,7 +9,7 @@ from flask_restful import Resource
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import User, Membership
+from models import User, Membership, StudyGroup
 
 ## Auth
 class Register(Resource):
@@ -28,7 +28,7 @@ class Register(Resource):
             db.session.add(user)
             db.session.commit()
 
-            session['user_id'] = user.id
+            session['user_id'] = user.user_id
             return user.to_dict(), 201
         except Exception as e:
             return {'error': str(e)}, 422
@@ -40,7 +40,7 @@ class Login(Resource):
         user = User.query.filter_by(email=data['email']).first()
 
         if user and user.authenticate(data['password']):
-            session['user_id'] = user.id
+            session['user_id'] = user.user_id
             return user.to_dict(), 200
         return {'error' : 'Invalid email or password'}, 401
     
@@ -98,6 +98,25 @@ class MembershipByID(Resource):
         db.session.delete(membership)
         db.session.commit()
         return {}, 204
+
+class MembershipsByStudyGroup(Resource):
+    def get(self, study_group_id):
+        study_group = StudyGroup.query.get(study_group_id)
+        if not study_group:
+            return {'error': 'Study group not found'}, 404
+        
+        memberships = Membership.query.filter_by(study_group_id=study_group_id).all()
+        return [m.to_dict() for m in memberships], 200
+
+
+class MembershipsByUser(Resource):
+    def get(self, user_id):
+        user = User.query.get(user_id)
+        if not user:
+            return {'error': 'User not found'}, 404
+        
+        memberships = Membership.query.filter_by(user_id=user_id).all()
+        return [m.to_dict() for m in memberships], 200
     
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
@@ -106,6 +125,8 @@ api.add_resource(CheckSession, '/check_session')
 
 api.add_resource(MembershipList, '/memberships')
 api.add_resource(MembershipByID, '/memberships/<int:id>')
+api.add_resource(MembershipsByStudyGroup, '/study_groups/<int:study_group_id>/memberships')
+api.add_resource(MembershipsByUser, '/users/<int:user_id>/memberships')
 
 # Views go here!
 
