@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
-import Home from "./Home"
+import Home from "./Home";
 import Register from "./Register";
 import Login from "./Login";
-import Navbar from "./Navbar"
-import MembershipForm from './MembershipForm'
-import Memberships from "../Memberships";
+import Navbar from "./Navbar";
+import MembershipForm from "./MembershipForm";
+import Memberships from "./Memberships";
 
+const mockCourses = [
+  { courseId: 1, courseName: 'Intro to Algorithms' },
+  { courseId: 2, courseName: 'Databases 101' },
+];
 
 function App() {
-  const [ user, setUser ] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetch("/check_session").then((res) => {
@@ -21,8 +25,7 @@ function App() {
 
   const handleLogin = (userData) => setUser(userData);
   const handleLogout = () => {
-    fetch("/logout", { method : "DELETE" })
-    .then(() => setUser(null))
+    fetch("/logout", { method: "DELETE" }).then(() => setUser(null));
   };
 
   return (
@@ -30,13 +33,13 @@ function App() {
       <Navbar user={user} onLogout={handleLogout} />
       <Switch>
         <Route exact path="/">
-          <Home user={user}/>
+          <Home user={user} courses={mockCourses} />
         </Route>
         <Route path="/login">
-          <Login onLogin={handleLogin}/>
+          <Login onLogin={handleLogin} />
         </Route>
         <Route path="/register">
-          <Register onLogin={handleLogin}/>
+          <Register onLogin={handleLogin} />
         </Route>
         <Route path="/memberships/new">
           <MembershipForm user={user} />
@@ -46,7 +49,7 @@ function App() {
         </Route>
       </Switch>
     </div>
-  )
+  );
 }
 
 export default App;

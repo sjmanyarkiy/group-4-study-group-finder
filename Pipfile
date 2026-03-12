@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 ipdb = "0.13.9"
 flask = "*"
+<<<<<<< HEAD
 Werkzeug = "2.2.2"
 sqlalchemy-serializer = "*"
 faker = "*"
@@ -18,3 +19,15 @@ flask-cors = "*"
 python_full_version = "3.8.13"
 
 [dev-packages]
+=======
+flask-sqlalchemy = "3.0.3"
+Werkzeug = "2.2.2"
+flask-migrate = "*"
+sqlalchemy-serializer = "*"
+flask-restful = "*"
+flask-cors = "*"
+faker = "*"
+
+[requires]
+python_full_version = "3.8.13"
+>>>>>>> sam-safari

@@ -1,22 +1,29 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import CourseList from './CourseList';
+import Header from './Header';
+import Footer from './Footer';
 
-function Home( { user }) {
+function Home({ user, courses }) {
   return (
     <div style={styles.container}>
-      { user ? (
+      {user ? (
         <div style={styles.card}>
           <h1 style={styles.title}>Welcome back, {user.name}!</h1>
           <p style={styles.subtitle}>
-            You are logged in as a <strong>{ user.user_category}</strong>
+            You are logged in as a <strong>{user.user_category}</strong>
           </p>
           <p style={styles.description}>
             Browse and join study groups, access course content, and connect with
             fellow {user.user_category === "lecturer" ? "students" : "learners"}.
           </p>
           <Link to="/groups" style={styles.primaryButton}>
-            Browse Study Groups → 
+            Browse Study Groups →
           </Link>
+          <div style={styles.courseSection}>
+            <Header title="Available Courses" subtitle="Find study groups by course" />
+            <CourseList courses={courses} />
+          </div>
         </div>
       ) : (
         <div style={styles.card}>
@@ -39,19 +46,20 @@ function Home( { user }) {
               <span style={styles.icon}>🏫</span>
               <p>Connect with institutions and fellow students</p>
             </div>
-        </div>
-        <div style={styles.buttons}>
-              <Link to="/register" style={styles.primaryButton}>
-                Get Started
-              </Link>
-              <Link to="/login" style={styles.secondaryButton}>
-                Login
-              </Link>
+          </div>
+          <div style={styles.buttons}>
+            <Link to="/register" style={styles.primaryButton}>
+              Get Started
+            </Link>
+            <Link to="/login" style={styles.secondaryButton}>
+              Login
+            </Link>
           </div>
         </div>
       )}
+      <Footer />
     </div>
-  )
+  );
 }
 
 const styles = {
@@ -133,6 +141,10 @@ const styles = {
     fontSize: "16px",
     fontWeight: "bold",
   },
+  courseSection: {
+    marginTop: "32px",
+    textAlign: "left",
+  },
 };
 
-export default Home
+export default Home;
