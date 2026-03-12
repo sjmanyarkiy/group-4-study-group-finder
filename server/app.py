@@ -3,7 +3,7 @@
 # Standard library imports
 
 # Local imports
-from config import app, db, api
+from config import app, api
 
 # Import models so SQLAlchemy registers them
 import models
