@@ -9,7 +9,7 @@ from flask_restful import Resource
 # Local imports
 from config import app, db, api
 # Add your model imports
-from models import User
+from models import User, Membership
 
 ## Auth
 class Register(Resource):
@@ -56,10 +56,56 @@ class CheckSession(Resource):
             return user.to_dict(), 200
         return {'error' : 'Not logged in'}, 401
     
+## Memberships
+class MembershipList(Resource):
+    def post(self):
+        data = request.get_json()
+        try:
+            membership = Membership(
+                name=data['name'],
+                fee=data['fee'],
+                tier=data['tier'],
+                user_id=data['user_id'],
+                study_group_id=data['study_group_id']
+            )
+            db.session.add(membership)
+            db.session.commit()
+            return membership.to_dict(), 201
+        except Exception as e:
+            return {'error': str(e)}, 422
+        
+class MembershipByID(Resource):
+    def patch(self, id):
+        membership = Membership.query.get(id)
+        if not membership:
+            return {'error': 'Membership not found'}, 404
+        
+        data = request.get_json()
+        try:
+            for field in ['name', 'fee', 'tier', 'date_graduated']:
+                if field in data:
+                    setattr(membership, field, data[field])
+            db.session.commit()
+            return membership.to_dict(), 200
+        except Exception as e:
+            return {'error': str(e)}, 422
+        
+    def delete(self, id):
+        membership = Membership.query.get(id)
+        if not membership:
+            return {'error': 'Membership not found'}, 404
+        
+        db.session.delete(membership)
+        db.session.commit()
+        return {}, 204
+    
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(CheckSession, '/check_session')
+
+api.add_resource(MembershipList, '/memberships')
+api.add_resource(MembershipByID, '/memberships/<int:id>')
 
 # Views go here!
 

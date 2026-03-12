@@ -11,7 +11,9 @@ from config import db
 class User(db.Model):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+    serialize_rules = ('-user.memberships', '-study_group.memberships')
+
+    user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     dob = db.Column(db.String)
     email = db.Column(db.String, unique=True)
@@ -19,6 +21,8 @@ class User(db.Model):
     phone_number = db.Column(db.Integer)
     user_category = db.Column(db.String)
     _password_hash = db.Column(db.String)
+
+    memberships = db.relationship("Membership", back_populates="user")
 
     @hybrid_property
     def password_hash(self):
@@ -53,3 +57,21 @@ class User(db.Model):
             'phone_number' : self.phone_number,
             'user_category' : self.user_category
         }
+# Membership Model
+
+class Membership(db.Model, SerializerMixin):
+    __tablename__ = "memberships"
+
+    membership_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    fee = db.Column(db.Integer, nullable=False)
+    date_joined = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_graduated = db.Column(db.DateTime, nullable=True)
+    tier = db.Column(db.String(20), nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
+    study_group_id = db.Column(db.Integer, db.ForeignKey("study_groups.study_group_id"), nullable=False)
+
+    user = db.relationship("User", back_populates="memberships")
+    study_group = db.relationship("StudyGroup", back_populates="memberships")
+    
