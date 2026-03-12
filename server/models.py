@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
@@ -42,6 +44,8 @@ class User(db.Model, SerializerMixin):
         self._password_hash = generate_password_hash(password)
 
     def authenticate(self, password):
+        if not self._password_hash:
+            return False
         return check_password_hash(self._password_hash, password)
 
     @validates('user_category')
@@ -138,7 +142,7 @@ class Institution(db.Model, SerializerMixin):
 
 
 class Membership(db.Model, SerializerMixin):
-    __tablename__ = "memberships"
+    __tablename__ = 'memberships'
 
     serialize_rules = ('-user.memberships', '-study_group.memberships')
 
@@ -149,8 +153,8 @@ class Membership(db.Model, SerializerMixin):
     date_graduated = db.Column(db.DateTime, nullable=True)
     tier = db.Column(db.String(20), nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"), nullable=False)
-    study_group_id = db.Column(db.Integer, db.ForeignKey("study_groups.study_group_id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    study_group_id = db.Column(db.Integer, db.ForeignKey('study_groups.id'), nullable=False)
 
     user = db.relationship("User", back_populates="memberships")
     study_group = db.relationship("StudyGroup", back_populates="memberships")

@@ -65,11 +65,10 @@ class CourseStudyGroupResource(Resource):
             return {'error': 'owner user not found'}, 404
         if owner.user_category.lower() != 'lecturer':
             return {'error': 'only lecturers can create study groups'}, 403
-
         sg = StudyGroup(
             name=name,
-            course_ID=course.course_ID,
-            owner_user_id=owner.user_ID,
+            course_id=course.id,
+            owner_user_id=owner.id,
         )
         db.session.add(sg)
         db.session.commit()

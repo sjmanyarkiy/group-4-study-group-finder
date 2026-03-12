@@ -6,6 +6,8 @@ import Login from "./Login";
 import Navbar from "./Navbar";
 import MembershipForm from "./MembershipForm";
 import Memberships from "./Memberships";
+import StudyGroups from "./StudyGroups";
+import Courses from "./Courses";
 
 const mockCourses = [
   { courseId: 1, courseName: 'Intro to Algorithms' },
@@ -17,9 +19,7 @@ function App() {
 
   useEffect(() => {
     fetch("/check_session").then((res) => {
-      if (res.ok) {
-        res.json().then((data) => setUser(data));
-      }
+      if (res.ok) res.json().then((data) => setUser(data));
     });
   }, []);
 
@@ -47,9 +47,15 @@ function App() {
         <Route path="/memberships">
           <Memberships user={user} />
         </Route>
+        <Route path="/groups">
+          <StudyGroups user={user} />
+        </Route>
+        <Route path="/courses">
+          <Courses user={user} />
+        </Route>
       </Switch>
     </div>
-  )
+  );
 }
 
 export default App;

@@ -1,0 +1,10 @@
+Flask
+Flask-RESTful
+Flask-Cors
+Flask-Migrate
+Flask-SQLAlchemy
+SQLAlchemy
+sqlalchemy-serializer
+Werkzeug
+Faker
+python-dotenv
