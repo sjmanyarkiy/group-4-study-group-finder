@@ -153,8 +153,8 @@ class Membership(db.Model, SerializerMixin):
     date_graduated = db.Column(db.DateTime, nullable=True)
     tier = db.Column(db.String(20), nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    study_group_id = db.Column(db.Integer, db.ForeignKey('study_groups.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    study_group_id = db.Column(db.Integer, db.ForeignKey('study_groups.study_group_id'), nullable=False)
 
     user = db.relationship("User", back_populates="memberships")
     study_group = db.relationship("StudyGroup", back_populates="memberships")
