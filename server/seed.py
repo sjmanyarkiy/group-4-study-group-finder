@@ -1,78 +1,39 @@
-#!/usr/bin/env python3
-
-# Standard library imports
-from random import randint, choice as rc
-
-# Remote library imports
-from faker import Faker
-
-# Local imports
 from app import app
-from models import db, User
+from config import db
+from models import User, StudyGroup, Membership
+from datetime import datetime
 
-if __name__ == '__main__':
-    fake = Faker()
-    with app.app_context():
-        print("Starting seed...")
-        # Seed code goes here!
-        # Clear existing data
-        User.query.delete()
+with app.app_context():
+    # Clear existing data
+    Membership.query.delete()
+    StudyGroup.query.delete()
+    User.query.delete()
 
-        # Seed users
-        users = [
-            User(
-                name="Sandra Achieng",
-                dob="1998-05-12",
-                email="sandra@test.com",
-                national_id="12345678",
-                phone_number="0712345678",
-                user_category="student"
-            ),
-            User(
-                name="Ajok Akello",
-                dob="1999-03-22",
-                email="ajok@test.com",
-                national_id="23456789",
-                phone_number="0723456789",
-                user_category="student"
-            ),
-            User(
-                name="Benson Mutua",
-                dob="1997-11-05",
-                email="benson@test.com",
-                national_id="34567890",
-                phone_number="0734567890",
-                user_category="student"
-            ),
-            User(
-                name="Samuel Otieno",
-                dob="1996-07-18",
-                email="samuel@test.com",
-                national_id="45678901",
-                phone_number="0745678901",
-                user_category="student"
-            ),
-            User(
-                name="Dr. Jane Wanjiru",
-                dob="1980-01-30",
-                email="jane.lecturer@test.com",
-                national_id="56789012",
-                phone_number="0756789012",
-                user_category="lecturer"
-            ),
-            User(
-                name="Prof. David Kamau",
-                dob="1975-09-14",
-                email="david.lecturer@test.com",
-                national_id="67890123",
-                phone_number="0767890123",
-                user_category="lecturer"
-            ),
-        ]
+    # Users
+    u1 = User(name="Sandra Mwangi", dob="1998-04-12", email="sandra@email.com", national_id=12345678, phone_number=712345678, user_category="student")
+    u1.password_hash = "password123"
 
-        for user in users:
-            user.password_hash = "password123"
-            db.session.add(user)
+    u2 = User(name="James Otieno", dob="1997-08-22", email="james@email.com", national_id=87654321, phone_number=722345678, user_category="student")
+    u2.password_hash = "password123"
 
-        db.session.commit()
-        print(f"Done! {len(users)} users seeded.")
+    u3 = User(name="Dr. Aisha Kamau", dob="1985-01-15", email="aisha@email.com", national_id=11223344, phone_number=733345678, user_category="lecturer")
+    u3.password_hash = "password123"
+
+    # Study Groups
+    sg1 = StudyGroup(name="Python Pros", description="A group for Python enthusiasts", subject="Computer Science")
+    sg2 = StudyGroup(name="Data Nerds", description="Data analysis and ML study group", subject="Data Science")
+    sg3 = StudyGroup(name="Web Warriors", description="Full stack web development", subject="Web Development")
+
+    db.session.add_all([u1, u2, u3, sg1, sg2, sg3])
+    db.session.commit()
+
+    # Memberships
+    m1 = Membership(name="Standard", fee=500, tier="bronze", user_id=u1.user_id, study_group_id=sg1.study_group_id)
+    m2 = Membership(name="Premium", fee=1000, tier="gold", user_id=u1.user_id, study_group_id=sg2.study_group_id)
+    m3 = Membership(name="Standard", fee=500, tier="bronze", user_id=u2.user_id, study_group_id=sg1.study_group_id)
+    m4 = Membership(name="Standard", fee=500, tier="silver", user_id=u3.user_id, study_group_id=sg3.study_group_id)
+
+    db.session.add_all([m1, m2, m3, m4])
+    db.session.commit()
+
+    print("Seeded successfully!")
