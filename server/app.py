@@ -2,12 +2,9 @@
 
 # Standard library imports
 
-# Remote library imports
-from flask import request
-from flask_restful import Resource
-
 # Local imports
 from config import app, db, api
+
 # Import models so SQLAlchemy registers them
 import models
 from routes.courses import (
@@ -28,6 +25,10 @@ api.add_resource(CourseStudyGroupResource, '/courses/<int:course_id>/study-group
 @app.route('/')
 def index():
     return '<h1>Project Server</h1>'
+
+
+# touch models to ensure they are imported during startup (no-op)
+app.logger.debug('models loaded: %d symbols', len(dir(models)))
 
 
 if __name__ == '__main__':
