@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build --prefix client",
+  "outputDirectory": "client/build",
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/server/app.py" }
+  ],
+  "functions": {
+    "server/app.py": {
+      "runtime": "vercel-python@3.0.7"
+    }
+  }
+}
