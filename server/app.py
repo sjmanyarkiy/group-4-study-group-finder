@@ -171,6 +171,30 @@ class InstitutionByID(Resource):
         db.session.commit()
         return {}, 204
 
+class ReviewList(Resource):
+    def get(self):
+        reviews = [n.to_dict() for n in Review.query.all()]
+        return reviews, 200
+
+
+
+    def post(self):
+        data = request.get_json()
+        try:
+            review = Review(
+                user_id=data['user_id'],
+                study_group_id=data['study_group_id'],
+                stars=data['stars'],
+                comment=data.get('comment', '')
+            )
+            db.session.add(review)
+            db.session.commit()
+            return review.to_dict(), 201
+        except Exception as e:
+            return {'error': str(e)}, 422
+
+api.add_resource(ReviewList, '/reviews')
+
 
 api.add_resource(Register, '/register')
 api.add_resource(Login, '/login')
