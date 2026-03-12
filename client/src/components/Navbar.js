@@ -12,6 +12,8 @@ function Navbar({ user, onLogout }){
                 { user ? (
                     <>
                         <span style={styles.welcome}>Hi, {user?.name?.split(" ")[0]}!</span>
+                        <Link to="/memberships" style={styles.link}>My Memberships</Link>
+                        <Link to="/memberships/new" style={styles.link}>Join a Group</Link>
                         <button onClick={onLogout} style={styles.button}>Logout</button>
                     </>
                 ) : (
