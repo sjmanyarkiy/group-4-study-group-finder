@@ -7,6 +7,13 @@ from datetime import datetime
 
 from config import db
 
+# Join table for StudyGroup <-> Institution many-to-many
+studygroup_institution = db.Table(
+    'studygroup_institution',
+    db.Column('study_group_id', db.Integer, db.ForeignKey('study_groups.study_group_id')),
+    db.Column('institution_id', db.Integer, db.ForeignKey('institutions.institution_id'))
+)
+
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
@@ -81,7 +88,7 @@ class Course(db.Model, SerializerMixin):
 class StudyGroup(db.Model, SerializerMixin):
     __tablename__ = 'study_groups'
 
-    serialize_rules = ('-memberships.study_group', '-reviews.study_group', '-owner.study_groups', '-course.study_groups')
+    serialize_rules = ('-memberships.study_group', '-reviews.study_group', '-owner.study_groups', '-course.study_groups', '-institutions.study_groups')
 
     study_group_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
@@ -98,6 +105,8 @@ class StudyGroup(db.Model, SerializerMixin):
     memberships = db.relationship('Membership', back_populates='study_group')
     reviews = db.relationship('Review', back_populates='study_group', cascade='all, delete-orphan')
 
+    institutions = db.relationship("Institution", secondary=studygroup_institution, back_populates="study_groups")
+
     def to_dict(self):
         return {
             'study_group_id': self.study_group_id,
@@ -105,6 +114,26 @@ class StudyGroup(db.Model, SerializerMixin):
             'description': self.description,
             'subject': self.subject,
             'created_at': str(self.created_at)
+        }
+
+class Institution(db.Model, SerializerMixin):
+    __tablename__ = "institutions"
+
+    serialize_rules = ('-study_groups.institutions',)
+
+    institution_id = db.Column(db.Integer, primary_key=True)
+    institution_name = db.Column(db.String(100), nullable=False)
+
+    study_groups = db.relationship(
+        "StudyGroup",
+        secondary=studygroup_institution,
+        back_populates="institutions"
+    )
+
+    def to_dict(self):
+        return {
+            "institution_id": self.institution_id,
+            "institution_name": self.institution_name
         }
 
 

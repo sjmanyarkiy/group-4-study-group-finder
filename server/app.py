@@ -4,7 +4,7 @@ from flask import request, session
 from flask_restful import Resource
 
 from config import app, db, api
-from models import User, Membership, StudyGroup, Course, Review
+from models import User, Membership, StudyGroup, Course, Review, Institution
 
 
 ## Auth
@@ -135,6 +135,41 @@ class StudyGroupList(Resource):
     def get(self):
         groups = StudyGroup.query.all()
         return [sg.to_dict() for sg in groups], 200
+    
+## Institutions
+class InstitutionList(Resource):
+    def get(self):
+        institutions = Institution.query.all()
+        return [i.to_dict() for i in institutions], 200
+
+    def post(self):
+        data = request.get_json()
+        try:
+            inst = Institution(institution_name=data['institution_name'])
+            db.session.add(inst)
+            db.session.commit()
+            return inst.to_dict(), 201
+        except Exception as e:
+            return {'error': str(e)}, 422
+
+class InstitutionByID(Resource):
+    def patch(self, id):
+        inst = Institution.query.get(id)
+        if not inst:
+            return {'error': 'Institution not found'}, 404
+        data = request.get_json()
+        if 'institution_name' in data:
+            inst.institution_name = data['institution_name']
+        db.session.commit()
+        return inst.to_dict(), 200
+
+    def delete(self, id):
+        inst = Institution.query.get(id)
+        if not inst:
+            return {'error': 'Institution not found'}, 404
+        db.session.delete(inst)
+        db.session.commit()
+        return {}, 204
 
 
 api.add_resource(Register, '/register')
@@ -151,6 +186,9 @@ api.add_resource(CourseListResource, '/courses')
 api.add_resource(CourseResource, '/courses/<int:course_id>')
 api.add_resource(CourseStudyGroupResource, '/courses/<int:course_id>/study-groups')
 api.add_resource(StudyGroupList, '/study_groups')
+
+api.add_resource(InstitutionList, '/institutions')
+api.add_resource(InstitutionByID, '/institutions/<int:id>')
 
 
 @app.route('/')
