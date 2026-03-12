@@ -4,6 +4,8 @@ import Home from "./Home"
 import Register from "./Register";
 import Login from "./Login";
 import Navbar from "./Navbar"
+import MembershipForm from './MembershipForm'
+import Memberships from "../Memberships";
 
 
 function App() {
@@ -35,6 +37,12 @@ function App() {
         </Route>
         <Route path="/register">
           <Register onLogin={handleLogin}/>
+        </Route>
+        <Route path="/memberships/new">
+          <MembershipForm user={user} />
+        </Route>
+        <Route path="/memberships">
+          <Memberships user={user} />
         </Route>
       </Switch>
     </div>
