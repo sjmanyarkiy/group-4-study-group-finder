@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import BASE_URL from "../api";
 
 function Courses({ user }) {
   const [courses, setCourses] = useState([]);
@@ -7,7 +8,7 @@ function Courses({ user }) {
   const [courseGroups, setCourseGroups] = useState({});
 
   useEffect(() => {
-    fetch("/courses")
+    fetch(`${BASE_URL}/courses`)
       .then((res) => res.json())
       .then((data) => setCourses(data));
   }, []);
@@ -19,7 +20,7 @@ function Courses({ user }) {
     }
     setExpandedCourse(courseId);
     if (!courseGroups[courseId]) {
-      fetch(`/courses/${courseId}/study-groups`)
+      fetch(`${BASE_URL}/courses/${courseId}/study-groups`)
         .then((res) => res.json())
         .then((data) => setCourseGroups((prev) => ({ ...prev, [courseId]: data })));
     }

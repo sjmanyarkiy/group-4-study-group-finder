@@ -17,7 +17,7 @@ function MembershipForm({ user }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("/memberships", {
+    fetch(`${BASE_URL}/memberships`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...formData, user_id: user.user_id }),
