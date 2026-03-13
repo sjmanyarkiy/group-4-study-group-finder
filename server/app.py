@@ -3,7 +3,7 @@
 from flask import request, session, render_template
 from flask_restful import Resource
 
-from .config import app, db, api
+from config import app, db, api
 from models import User, Membership, StudyGroup, Course, Review, Institution
 
 
