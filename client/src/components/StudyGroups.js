@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import BASE_URL from "../api";
 
 function StudyGroups({ user }) {
   const [groups, setGroups] = useState([]);
