@@ -4,7 +4,7 @@ from flask import request, session
 from flask_restful import Resource
 
 from .config import app, db, api
-from .models import User, Membership, StudyGroup, Course, Review, Institution
+from models import User, Membership, StudyGroup, Course, Review, Institution
 
 
 ## Auth
