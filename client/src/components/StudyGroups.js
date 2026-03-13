@@ -12,9 +12,9 @@ function StudyGroups({ user }) {
   const [filterCourse, setFilterCourse] = useState("all");
 
   useEffect(() => {
-    fetch(`${BASE_URL}/study_groups`).then(r => r.json()).then(setGroups);
-    fetch(`${BASE_URL}/courses`).then(r => r.json()).then(setCourses);
-    fetch(`${BASE_URL}/reviews`).then(r => r.json()).then(setReviews);
+    fetch("/study_groups").then(r => r.json()).then(setGroups);
+    fetch("/courses").then(r => r.json()).then(setCourses);
+    fetch("/reviews").then(r => r.json()).then(setReviews);
   }, []);
 
   const getCourse = (courseId) => courses.find(c => c.course_id === courseId);
@@ -30,7 +30,7 @@ function StudyGroups({ user }) {
 
   const handleReviewSubmit = (e, studyGroupId) => {
     e.preventDefault();
-    fetch(`${BASE_URL}/reviews`, {
+    fetch("/reviews", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -29,7 +29,7 @@ function Register({ onLogin }) {
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch(`${BASE_URL}/register`, {
+            fetch("/register", {
                 method: "POST",
                 headers: { "Content-Type" : "application/json" },
                 body: JSON.stringify(values),

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import request, session
+from flask import request, session, render_template
 from flask_restful import Resource
 
 from .config import app, db, api
@@ -215,9 +215,13 @@ api.add_resource(InstitutionList, '/institutions')
 api.add_resource(InstitutionByID, '/institutions/<int:id>')
 
 
-@app.route('/')
-def index():
-    return '<h1>Project Server</h1>'
+# @app.route('/')
+# def index():
+#     return '<h1>Project Server</h1>'
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("index.html")
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
