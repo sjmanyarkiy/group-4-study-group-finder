@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import CourseCard from './CourseCard';
 
 const CourseList = ({ courses = [] }) => (
-  <section className="course-list">
+  <section style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "16px" }}>
     {courses.map((c) => (
-      <CourseCard key={c.courseId} {...c} />
+      <CourseCard key={c.course_id || c.courseId} {...c} />
     ))}
   </section>
 );

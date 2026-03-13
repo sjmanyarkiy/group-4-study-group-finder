@@ -164,6 +164,18 @@ class Membership(db.Model, SerializerMixin):
         if value not in ['bronze', 'silver', 'gold']:
             raise ValueError('Tier must be bronze, silver, or gold')
         return value
+    
+    def to_dict(self):
+        return {
+            'membership_id': self.membership_id,
+            'name': self.name,
+            'fee': self.fee,
+            'tier': self.tier,
+            'date_joined': str(self.date_joined),
+            'date_graduated': str(self.date_graduated) if self.date_graduated else None,
+            'user_id': self.user_id,
+            'study_group_id': self.study_group_id
+        }
 
 
 class Review(db.Model, SerializerMixin):

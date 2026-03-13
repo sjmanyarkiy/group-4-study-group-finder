@@ -1,149 +1,181 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import CourseList from './CourseList';
-import Header from './Header';
 import Footer from './Footer';
 
 function Home({ user, courses }) {
   return (
-    <div style={styles.container}>
-      {user ? (
-        <div style={styles.card}>
-          <h1 style={styles.title}>Welcome back, {user.name}!</h1>
-          <p style={styles.subtitle}>
-            You are logged in as a <strong>{user.user_category}</strong>
-          </p>
-          <p style={styles.description}>
-            Browse and join study groups, access course content, and connect with
-            fellow {user.user_category === "lecturer" ? "students" : "learners"}.
-          </p>
-          <Link to="/groups" style={styles.primaryButton}>
-            Browse Study Groups →
-          </Link>
-          <div style={styles.courseSection}>
-            <Header title="Available Courses" subtitle="Find study groups by course" />
-            <CourseList courses={courses} />
-          </div>
+    <div style={styles.page}>
+
+      {/* Hero */}
+      <div style={styles.hero}>
+        <div style={styles.heroInner}>
+          {user ? (
+            <>
+              <p style={styles.heroEyebrow}>Welcome back 👋</p>
+              <h1 style={styles.heroTitle}>{user.name}</h1>
+              <p style={styles.heroSub}>
+                You're signed in as a <span style={styles.badge}>{user.user_category}</span>. Ready to keep learning?
+              </p>
+              <div style={styles.heroButtons}>
+                <Link to="/groups" style={styles.primaryBtn}>Browse Study Groups</Link>
+                <Link to="/memberships" style={styles.ghostBtn}>My Memberships</Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <p style={styles.heroEyebrow}>Your study community</p>
+              <h1 style={styles.heroTitle}>Learn better,<br />together.</h1>
+              <p style={styles.heroSub}>
+                LetsStudy connects students and lecturers through focused study groups — find yours today.
+              </p>
+              <div style={styles.heroButtons}>
+                <Link to="/register" style={styles.primaryBtn}>Get Started</Link>
+                <Link to="/login" style={styles.ghostBtn}>Log In</Link>
+              </div>
+            </>
+          )}
         </div>
-      ) : (
-        <div style={styles.card}>
-          <h1 style={styles.title}>Welcome to LetsStudy! 📚</h1>
-          <p style={styles.description}>
-            A platform for students and lecturers to connect, collaborate, and
-            learn together. Join study groups, access course content, and track
-            your progress.
-          </p>
-          <div style={styles.features}>
-            <div style={styles.feature}>
-              <span style={styles.icon}>🎓</span>
-              <p>Join study groups for Python, JavaScript and more</p>
+
+        {/* Decorative stat pills */}
+        <div style={styles.statRow}>
+          <div style={styles.statPill}>📚 Multiple Courses</div>
+          <div style={styles.statPill}>👥 Active Study Groups</div>
+          <div style={styles.statPill}>⭐ Peer Reviews</div>
+        </div>
+      </div>
+
+      {/* Features (logged out only) */}
+      {!user && (
+        <div style={styles.section}>
+          <div style={styles.sectionInner}>
+            <h2 style={styles.sectionTitle}>Why LetsStudy?</h2>
+            <div style={styles.featureGrid}>
+              <div style={styles.featureCard}>
+                <span style={styles.featureIcon}>🎓</span>
+                <h3 style={styles.featureHeading}>Join Study Groups</h3>
+                <p style={styles.featureText}>Find groups for your course and connect with fellow learners working towards the same goals.</p>
+              </div>
+              <div style={styles.featureCard}>
+                <span style={styles.featureIcon}>⭐</span>
+                <h3 style={styles.featureHeading}>Rate & Review</h3>
+                <p style={styles.featureText}>Share your experience and help others find the best study groups for their needs.</p>
+              </div>
+              <div style={styles.featureCard}>
+                <span style={styles.featureIcon}>🏫</span>
+                <h3 style={styles.featureHeading}>Connect Institutions</h3>
+                <p style={styles.featureText}>Study groups are linked to real institutions — find communities at your university.</p>
+              </div>
             </div>
-            <div style={styles.feature}>
-              <span style={styles.icon}>⭐️</span>
-              <p>Rate and review your learning experience in each group</p>
-            </div>
-            <div style={styles.feature}>
-              <span style={styles.icon}>🏫</span>
-              <p>Connect with institutions and fellow students</p>
-            </div>
-          </div>
-          <div style={styles.buttons}>
-            <Link to="/register" style={styles.primaryButton}>
-              Get Started
-            </Link>
-            <Link to="/login" style={styles.secondaryButton}>
-              Login
-            </Link>
           </div>
         </div>
       )}
+
+      {/* Courses Section */}
+      <div style={styles.coursesSection}>
+        <div style={styles.sectionInner}>
+          <div style={styles.coursesSectionHeader}>
+            <h2 style={styles.sectionTitle}>Available Courses</h2>
+            <Link to="/courses" style={styles.viewAllLink}>View all courses →</Link>
+          </div>
+          <CourseList courses={courses} />
+        </div>
+      </div>
+
+      {/* CTA (logged out only) */}
+      {!user && (
+        <div style={styles.cta}>
+          <h2 style={styles.ctaTitle}>Ready to start learning?</h2>
+          <p style={styles.ctaSub}>Join hundreds of students already studying smarter.</p>
+          <Link to="/register" style={styles.ctaBtn}>Create a Free Account</Link>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
 }
 
 const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    minHeight: "80vh",
-    padding: "20px",
-    backgroundColor: "#f5f7fa",
-  },
-  card: {
-    backgroundColor: "white",
-    borderRadius: "12px",
-    padding: "48px",
-    maxWidth: "600px",
-    width: "100%",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+  page: { backgroundColor: "#FAF8F5", minHeight: "100vh" },
+
+  // Hero
+  hero: {
+    backgroundColor: "#2E4057",
+    padding: "80px 24px 48px",
     textAlign: "center",
   },
-  title: {
-    fontSize: "32px",
-    color: "#2E4057",
-    marginBottom: "12px",
+  heroInner: { maxWidth: "680px", margin: "0 auto 48px" },
+  heroEyebrow: {
+    fontSize: "13px", fontWeight: "600", letterSpacing: "2px",
+    textTransform: "uppercase", color: "#048A81", marginBottom: "16px",
   },
-  subtitle: {
-    fontSize: "16px",
-    color: "#555",
-    marginBottom: "16px",
+  heroTitle: {
+    fontFamily: "'Playfair Display', serif",
+    fontSize: "52px", fontWeight: "700", color: "white",
+    lineHeight: "1.15", marginBottom: "20px",
   },
-  description: {
-    fontSize: "16px",
-    color: "#666",
-    lineHeight: "1.6",
-    marginBottom: "32px",
+  heroSub: { fontSize: "18px", color: "rgba(255,255,255,0.75)", lineHeight: "1.6", marginBottom: "36px" },
+  heroButtons: { display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" },
+  primaryBtn: {
+    padding: "14px 32px", backgroundColor: "#048A81", color: "white",
+    borderRadius: "8px", textDecoration: "none", fontSize: "15px", fontWeight: "600",
   },
-  features: {
-    display: "flex",
-    justifyContent: "space-between",
-    gap: "16px",
-    marginBottom: "32px",
+  ghostBtn: {
+    padding: "14px 32px", backgroundColor: "transparent",
+    border: "1px solid rgba(255,255,255,0.4)", color: "white",
+    borderRadius: "8px", textDecoration: "none", fontSize: "15px",
   },
-  feature: {
-    flex: 1,
-    backgroundColor: "#f0f4f8",
-    borderRadius: "8px",
-    padding: "16px",
-    fontSize: "14px",
-    color: "#444",
+  badge: {
+    backgroundColor: "rgba(4,138,129,0.2)", color: "#48D1CC",
+    padding: "2px 10px", borderRadius: "20px", fontSize: "14px", fontWeight: "600",
   },
-  icon: {
-    fontSize: "28px",
-    display: "block",
-    marginBottom: "8px",
+  statRow: {
+    display: "flex", justifyContent: "center", gap: "12px", flexWrap: "wrap",
+    maxWidth: "680px", margin: "0 auto",
   },
-  buttons: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "16px",
+  statPill: {
+    backgroundColor: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.7)",
+    padding: "8px 20px", borderRadius: "20px", fontSize: "13px",
+    border: "1px solid rgba(255,255,255,0.12)",
   },
-  primaryButton: {
-    display: "inline-block",
-    padding: "12px 28px",
-    backgroundColor: "#2E4057",
-    color: "white",
-    borderRadius: "6px",
-    textDecoration: "none",
-    fontSize: "16px",
-    fontWeight: "bold",
+
+  // Sections
+  section: { padding: "72px 24px", backgroundColor: "white" },
+  coursesSection: { padding: "72px 24px", backgroundColor: "#FAF8F5" },
+  sectionInner: { maxWidth: "1000px", margin: "0 auto" },
+  sectionTitle: {
+    fontFamily: "'Playfair Display', serif",
+    fontSize: "32px", color: "#2E4057", marginBottom: "40px",
   },
-  secondaryButton: {
-    display: "inline-block",
-    padding: "12px 28px",
-    backgroundColor: "transparent",
-    color: "#2E4057",
-    border: "2px solid #2E4057",
-    borderRadius: "6px",
-    textDecoration: "none",
-    fontSize: "16px",
-    fontWeight: "bold",
+  coursesSectionHeader: {
+    display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px",
   },
-  courseSection: {
-    marginTop: "32px",
-    textAlign: "left",
+  viewAllLink: { fontSize: "14px", color: "#048A81", textDecoration: "none", fontWeight: "600" },
+
+  // Features
+  featureGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "24px" },
+  featureCard: {
+    backgroundColor: "#FAF8F5", borderRadius: "12px", padding: "32px 24px",
+    border: "1px solid #E8E4DD",
+  },
+  featureIcon: { fontSize: "32px", display: "block", marginBottom: "16px" },
+  featureHeading: { fontSize: "18px", color: "#2E4057", marginBottom: "10px", fontFamily: "'Playfair Display', serif" },
+  featureText: { fontSize: "14px", color: "#7A7670", lineHeight: "1.7" },
+
+  // CTA
+  cta: {
+    backgroundColor: "#048A81", padding: "72px 24px", textAlign: "center",
+  },
+  ctaTitle: {
+    fontFamily: "'Playfair Display', serif",
+    fontSize: "36px", color: "white", marginBottom: "12px",
+  },
+  ctaSub: { fontSize: "16px", color: "rgba(255,255,255,0.8)", marginBottom: "32px" },
+  ctaBtn: {
+    display: "inline-block", padding: "14px 36px", backgroundColor: "white",
+    color: "#048A81", borderRadius: "8px", textDecoration: "none",
+    fontSize: "15px", fontWeight: "700",
   },
 };
 

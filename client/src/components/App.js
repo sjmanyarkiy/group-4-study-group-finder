@@ -9,18 +9,22 @@ import Memberships from "./Memberships";
 import StudyGroups from "./StudyGroups";
 import Courses from "./Courses";
 
-const mockCourses = [
-  { courseId: 1, courseName: 'Intro to Algorithms' },
-  { courseId: 2, courseName: 'Databases 101' },
-];
+// const mockCourses = [
+//   { courseId: 1, courseName: 'Intro to Algorithms' },
+//   { courseId: 2, courseName: 'Databases 101' },
+// ];
 
 function App() {
   const [user, setUser] = useState(null);
+  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
     fetch("/check_session").then((res) => {
       if (res.ok) res.json().then((data) => setUser(data));
     });
+    fetch("/courses")
+    .then((r) => r.json())
+    .then(setCourses);
   }, []);
 
   const handleLogin = (userData) => setUser(userData);
@@ -33,7 +37,7 @@ function App() {
       <Navbar user={user} onLogout={handleLogout} />
       <Switch>
         <Route exact path="/">
-          <Home user={user} courses={mockCourses} />
+          <Home user={user} courses={courses} />
         </Route>
         <Route path="/login">
           <Login onLogin={handleLogin} />
