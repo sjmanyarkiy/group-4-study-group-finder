@@ -7,7 +7,7 @@ function Courses({ user }) {
   const [courseGroups, setCourseGroups] = useState({});
 
   useEffect(() => {
-    fetch("/courses")
+    fetch(`/courses`)
       .then((res) => res.json())
       .then((data) => setCourses(data));
   }, []);
@@ -19,7 +19,7 @@ function Courses({ user }) {
     }
     setExpandedCourse(courseId);
     if (!courseGroups[courseId]) {
-      fetch("/courses/${courseId}/study-groups")
+      fetch(`/courses/${courseId}/study-groups`)
         .then((res) => res.json())
         .then((data) => setCourseGroups((prev) => ({ ...prev, [courseId]: data })));
     }

@@ -23,7 +23,7 @@ function MembershipForm({ user }) {
   ];
 
   useEffect(() => {
-    fetch("/study_groups")
+    fetch(`/study_groups`)
       .then((r) => r.json())
       .then(setGroups);
   }, []);
@@ -44,7 +44,7 @@ function MembershipForm({ user }) {
     if (!formData.tier) return setError("Please select a membership tier.");
     if (!formData.study_group_id) return setError("Please select a study group.");
 
-    fetch("/memberships", {
+    fetch(`/memberships`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -54,7 +54,7 @@ function MembershipForm({ user }) {
     }).then((res) => {
       if (res.ok) {
         setSuccess(true);
-        setTimeout(() => history.push("/memberships"), 1500);
+        setTimeout(() => history.push(`/memberships`), 1500);
       } else {
         res.json().then((d) => setError(d.error));
       }

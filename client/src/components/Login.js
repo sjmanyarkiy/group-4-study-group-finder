@@ -18,7 +18,7 @@ function Login( { onLogin }) {
         },
         validationSchema: formSchema,
         onSubmit: (values) => {
-            fetch("/login", {
+            fetch(`/login`, {
                 method: "POST",
                 headers: { "Content-Type" : "application/json" },
                 body: JSON.stringify(values),
