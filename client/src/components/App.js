@@ -19,7 +19,7 @@ function App() {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    fetch("/check_session").then((res) => {
+    fetch(`/check_session`).then((res) => {
       if (res.ok) res.json().then((data) => setUser(data));
     });
     fetch("/courses")
@@ -29,7 +29,7 @@ function App() {
 
   const handleLogin = (userData) => setUser(userData);
   const handleLogout = () => {
-    fetch("/logout", { method: "DELETE" }).then(() => setUser(null));
+    fetch(`/logout`, { method: "DELETE" }).then(() => setUser(null));
   };
 
   return (
