@@ -219,6 +219,9 @@ api.add_resource(InstitutionByID, '/institutions/<int:id>')
 # def index():
 #     return '<h1>Project Server</h1>'
 
+with app.app_context():
+    db.create_all()
+
 @app.errorhandler(404)
 def not_found(e):
     return render_template("index.html")
