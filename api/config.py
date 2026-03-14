@@ -13,7 +13,13 @@ app = Flask(
     static_folder='../client/build',
     template_folder='../client/build'
 )
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///app.db')
+
+# Database URL — fix Render's postgres:// to postgresql:// for SQLAlchemy
+uri = os.environ.get('DATABASE_URL', 'sqlite:///app.db')
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
@@ -30,5 +36,4 @@ api = Api(app)
 
 CORS(app, supports_credentials=True, origins=[
     "http://localhost:3000",
-    os.environ.get('FRONTEND_URL', '')
 ])
