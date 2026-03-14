@@ -9,7 +9,7 @@ services:
     name: letsstudy-api
     runtime: python
     rootDir: api
-    buildCommand: pip install -r requirements.txt && cd ../client && npm install && npm run build
+    buildCommand: pip install -r requirements.txt && flask db upgrade && cd ../client && npm install && npm run build
     startCommand: gunicorn app:app
     envVars:
       - key: DATABASE_URL
@@ -20,3 +20,5 @@ services:
         generateValue: true
       - key: FLASK_ENV
         value: production
+      - key: FLASK_APP
+        value: app.py
