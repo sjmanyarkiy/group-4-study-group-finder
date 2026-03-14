@@ -22,7 +22,7 @@ function App() {
     fetch(`/check_session`).then((res) => {
       if (res.ok) res.json().then((data) => setUser(data));
     });
-    fetch("/courses")
+    fetch(`/courses`)
     .then((r) => r.json())
     .then(setCourses);
   }, []);
