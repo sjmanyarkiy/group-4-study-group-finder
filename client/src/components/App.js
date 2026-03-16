@@ -10,12 +10,7 @@ import StudyGroups from "./StudyGroups";
 import Courses from "./Courses";
 import CreateGroupForm from './CreateGroupForm';
 import CourseworkDetail from "./CourseworkDetail";
-
-
-// const mockCourses = [
-//   { courseId: 1, courseName: 'Intro to Algorithms' },
-//   { courseId: 2, courseName: 'Databases 101' },
-// ];
+import GroupStudents from "./GroupStudents";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -26,8 +21,8 @@ function App() {
       if (res.ok) res.json().then((data) => setUser(data));
     });
     fetch(`/courses`)
-    .then((r) => r.json())
-    .then(setCourses);
+      .then((r) => r.json())
+      .then((data) => { if (Array.isArray(data)) setCourses(data); });
   }, []);
 
   const handleLogin = (userData) => setUser(userData);
@@ -60,14 +55,14 @@ function App() {
         <Route path="/groups/:groupId/coursework">
           <CourseworkDetail user={user} />
         </Route>
+        <Route path="/groups/:groupId/students">
+          <GroupStudents user={user} />
+        </Route>
         <Route path="/groups">
           <StudyGroups user={user} />
         </Route>
         <Route path="/courses">
           <Courses user={user} />
-        </Route>
-        <Route path="/groups/:groupId/coursework">
-          <CourseworkDetail user={user} />
         </Route>
       </Switch>
     </div>

@@ -12,8 +12,15 @@ function Navbar({ user, onLogout }){
                 { user ? (
                     <>
                         <span style={styles.welcome}>Hi, {user?.name?.split(" ")[0]}!</span>
-                        <Link to="/memberships" style={styles.link}>My Memberships</Link>
-                        <Link to="/memberships/new" style={styles.link}>Join a Group</Link>
+                        {user.user_category === "student" && (
+                            <>
+                                <Link to="/memberships" style={styles.link}>My Memberships</Link>
+                                <Link to="/memberships/new" style={styles.link}>Join a Group</Link>
+                            </>
+                        )}
+                        {user.user_category === "lecturer" && (
+                            <Link to="/groups/new" style={styles.link}>Create Group</Link>
+                        )}
                         <button onClick={onLogout} style={styles.button}>Logout</button>
                     </>
                 ) : (
@@ -21,9 +28,6 @@ function Navbar({ user, onLogout }){
                         <Link to="/login" style={styles.link}>Log In</Link>
                         <Link to="/register" style={styles.link}>Register</Link>
                     </>
-                )}
-                {user?.user_category === "lecturer" && (
-                  <Link to="/groups/new" style={styles.link}>Create Group</Link>
                 )}
             </div>
         </nav>

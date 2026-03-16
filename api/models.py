@@ -178,7 +178,10 @@ class Membership(db.Model, SerializerMixin):
             'date_graduated': str(self.date_graduated) if self.date_graduated else None,
             'user_id': self.user_id,
             'study_group_id': self.study_group_id,
-            'study_group_name': self.study_group.name if self.study_group else None
+            'study_group_name': self.study_group.name if self.study_group else None,
+            'student_name': self.user.name if self.user else None,
+            'student_email': self.user.email if self.user else None,
+            'student_phone': self.user.phone_number if self.user else None,
         }
 
 
