@@ -23,7 +23,7 @@ function Courses({ user }) {
     fetch(`/users/${user.user_id}/memberships`)
       .then((res) => res.json())
       .then((data) => { if (Array.isArray(data)) setMemberships(data); });
-  }, [user]);
+  }, [user, isStudent]);
 
   const handleExpand = (courseId) => {
     if (expandedCourse === courseId) {
