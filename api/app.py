@@ -4,7 +4,7 @@ from flask import request, session, render_template
 from flask_restful import Resource
 
 from config import app, db, api
-from models import User, Membership, StudyGroup, Course, Review, Institution
+from models import User, Membership, StudyGroup, Course, Review, Institution, Coursework
 
 
 ## Auth
@@ -220,6 +220,46 @@ class ReviewList(Resource):
         except Exception as e:
             return {'error': str(e)}, 422
 
+class CourseworkByGroup(Resource):
+    def get(self, study_group_id):
+        sg = StudyGroup.query.get(study_group_id)
+        if not sg:
+            return {'error': 'Study group not found'}, 404
+        return [c.to_dict() for c in sg.coursework], 200
+
+    def post(self, study_group_id):
+        user = User.query.get(session.get('user_id'))
+        if not user:
+            return {'error': 'Not logged in'}, 401
+        if user.user_category != 'lecturer':
+            return {'error': 'Only lecturers can add coursework'}, 403
+        data = request.get_json()
+        try:
+            cw = Coursework(
+                title=data['title'],
+                description=data.get('description', ''),
+                pdf_data=data.get('pdf_data'),
+                pdf_filename=data.get('pdf_filename'),
+                study_group_id=study_group_id
+            )
+            db.session.add(cw)
+            db.session.commit()
+            return cw.to_dict(), 201
+        except Exception as e:
+            return {'error': str(e)}, 422
+
+class CourseworkByID(Resource):
+    def delete(self, id):
+        user = User.query.get(session.get('user_id'))
+        if not user or user.user_category != 'lecturer':
+            return {'error': 'Unauthorized'}, 403
+        cw = Coursework.query.get(id)
+        if not cw:
+            return {'error': 'Not found'}, 404
+        db.session.delete(cw)
+        db.session.commit()
+        return {}, 204
+
 api.add_resource(ReviewList, '/reviews')
 
 
@@ -240,6 +280,8 @@ api.add_resource(StudyGroupList, '/study_groups')
 
 api.add_resource(InstitutionList, '/institutions')
 api.add_resource(InstitutionByID, '/institutions/<int:id>')
+api.add_resource(CourseworkByGroup, '/study_groups/<int:study_group_id>/coursework')
+api.add_resource(CourseworkByID, '/coursework/<int:id>')
 
 
 # @app.route('/')

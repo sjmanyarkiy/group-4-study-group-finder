@@ -108,6 +108,7 @@ class StudyGroup(db.Model, SerializerMixin):
     owner = db.relationship('User', back_populates='study_groups')
     memberships = db.relationship('Membership', back_populates='study_group')
     reviews = db.relationship('Review', back_populates='study_group', cascade='all, delete-orphan')
+    coursework = db.relationship('Coursework', back_populates='study_group', cascade='all, delete-orphan')
 
     institutions = db.relationship("Institution", secondary=studygroup_institution, back_populates="study_groups")
 
@@ -117,6 +118,8 @@ class StudyGroup(db.Model, SerializerMixin):
             'name': self.name,
             'description': self.description,
             'subject': self.subject,
+            'course_id': self.course_id,
+            'course_name': self.course.course_name if self.course else None,
             'created_at': str(self.created_at)
         }
 
@@ -201,5 +204,31 @@ class Review(db.Model, SerializerMixin):
             'study_group_id': self.study_group_id,
             'stars': self.stars,
             'comment': self.comment,
+            'created_at': str(self.created_at)
+        }
+
+class Coursework(db.Model, SerializerMixin):
+    __tablename__ = 'coursework'
+
+    serialize_rules = ('-study_group.coursework',)
+
+    coursework_id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    pdf_data = db.Column(db.Text, nullable=True)  # base64 encoded
+    pdf_filename = db.Column(db.String(200), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    study_group_id = db.Column(db.Integer, db.ForeignKey('study_groups.study_group_id'), nullable=False)
+    study_group = db.relationship('StudyGroup', back_populates='coursework')
+
+    def to_dict(self):
+        return {
+            'coursework_id': self.coursework_id,
+            'title': self.title,
+            'description': self.description,
+            'pdf_filename': self.pdf_filename,
+            'pdf_data': self.pdf_data,
+            'study_group_id': self.study_group_id,
             'created_at': str(self.created_at)
         }

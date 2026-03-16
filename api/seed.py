@@ -17,7 +17,7 @@ def seed_data():
     db.session.commit()
 
     # Users
-    u1 = User(name="Sandra Mwangi", dob="1998-04-12", email="sandra@email.com", national_id=12345678, phone_number=712345678, user_category="student")
+    u1 = User(name="Sandra Maina", dob="1998-04-12", email="sandra@email.com", national_id=12345678, phone_number=712345678, user_category="student")
     u1.password_hash = "password123"
 
     u2 = User(name="James Otieno", dob="1997-08-22", email="james@email.com", national_id=87654321, phone_number=722345678, user_category="student")

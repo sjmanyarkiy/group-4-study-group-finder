@@ -8,7 +8,9 @@ import MembershipForm from "./MembershipForm";
 import Memberships from "./Memberships";
 import StudyGroups from "./StudyGroups";
 import Courses from "./Courses";
-import CreateGroupForm from './CreateGroupForm'
+import CreateGroupForm from './CreateGroupForm';
+import CourseworkDetail from "./CourseworkDetail";
+
 
 // const mockCourses = [
 //   { courseId: 1, courseName: 'Intro to Algorithms' },
@@ -55,11 +57,17 @@ function App() {
         <Route path="/groups/new">
           <CreateGroupForm user={user} courses={courses} />
         </Route>
+        <Route path="/groups/:groupId/coursework">
+          <CourseworkDetail user={user} />
+        </Route>
         <Route path="/groups">
           <StudyGroups user={user} />
         </Route>
         <Route path="/courses">
           <Courses user={user} />
+        </Route>
+        <Route path="/groups/:groupId/coursework">
+          <CourseworkDetail user={user} />
         </Route>
       </Switch>
     </div>
