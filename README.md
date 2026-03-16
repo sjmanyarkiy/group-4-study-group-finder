@@ -141,14 +141,6 @@ Review
 | GET | `/reviews` | List all reviews |
 | POST | `/reviews` | Post a review |
 
-### Institutions
-| Method | Route | Description |
-|---|---|---|
-| GET | `/institutions` | List all institutions |
-| POST | `/institutions` | Add an institution |
-| PATCH | `/institutions/<id>` | Update an institution |
-| DELETE | `/institutions/<id>` | Delete an institution |
-
 ### Coursework
 | Method | Route | Description |
 |---|---|---|
