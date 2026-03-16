@@ -6,8 +6,6 @@ function StudyGroups({ user }) {
   const [courses, setCourses] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [expandedReviews, setExpandedReviews] = useState(null);
-  const [expandedMembers, setExpandedMembers] = useState(null);
-  const [groupMembers, setGroupMembers] = useState({});
   const [reviewForm, setReviewForm] = useState({ studyGroupId: null, stars: 5, comment: "" });
   const [message, setMessage] = useState(null);
   const [filterCourse, setFilterCourse] = useState("all");
@@ -28,23 +26,6 @@ function StudyGroups({ user }) {
   const filtered = filterCourse === "all"
     ? groups
     : groups.filter(g => g.course_id === parseInt(filterCourse));
-
-  const handleToggleMembers = (groupId) => {
-    if (expandedMembers === groupId) {
-      setExpandedMembers(null);
-      return;
-    }
-    setExpandedMembers(groupId);
-    if (!groupMembers[groupId]) {
-      fetch(`/study_groups/${groupId}/memberships`)
-        .then(r => r.json())
-        .then(data => {
-          if (Array.isArray(data)) {
-            setGroupMembers(prev => ({ ...prev, [groupId]: data }));
-          }
-        });
-    }
-  };
 
   const handleReviewSubmit = (e, studyGroupId) => {
     e.preventDefault();
@@ -69,12 +50,6 @@ function StudyGroups({ user }) {
         res.json().then(d => setMessage(d.error));
       }
     });
-  };
-
-  const tierColors = {
-    gold: { bg: "#FEF3E2", color: "#B7791F" },
-    silver: { bg: "#F0F4F8", color: "#4A5568" },
-    bronze: { bg: "#FDF0E0", color: "#92400E" },
   };
 
   return (
@@ -114,7 +89,6 @@ function StudyGroups({ user }) {
           const course = getCourse(group.course_id);
           const groupReviews = getGroupReviews(group.study_group_id);
           const avg = getAvg(group.study_group_id);
-          const members = groupMembers[group.study_group_id] || [];
           const isLecturer = user?.user_category === "lecturer";
 
           return (
@@ -150,7 +124,6 @@ function StudyGroups({ user }) {
                     <Link to="/memberships/new" style={styles.joinBtn}>Join Group</Link>
                   ) : null}
 
-                  {/* View Students — lecturer only */}
                   {isLecturer && (
                     <Link
                       to={`/groups/${group.study_group_id}/students`}
@@ -181,43 +154,6 @@ function StudyGroups({ user }) {
                     </button>
                   )}
                 </div>
-
-                {/* Students List */}
-                {isLecturer && expandedMembers === group.study_group_id && (
-                  <div style={styles.membersSection}>
-                    <h4 style={styles.membersTitle}>Enrolled Students ({members.length})</h4>
-                    {members.length === 0 ? (
-                      <p style={styles.emptyReviews}>No students enrolled yet.</p>
-                    ) : (
-                      <div style={styles.membersTable}>
-                        <div style={styles.tableHeader}>
-                          <span>Name</span>
-                          <span>Email</span>
-                          <span>Phone</span>
-                          <span>Tier</span>
-                          <span>Joined</span>
-                        </div>
-                        {members.map(m => (
-                          <div key={m.membership_id} style={styles.tableRow}>
-                            <span style={styles.studentName}>{m.student_name}</span>
-                            <span style={styles.tableCell}>{m.student_email}</span>
-                            <span style={styles.tableCell}>{m.student_phone}</span>
-                            <span style={{
-                              ...styles.tierBadge,
-                              backgroundColor: tierColors[m.tier]?.bg,
-                              color: tierColors[m.tier]?.color,
-                            }}>
-                              {m.tier}
-                            </span>
-                            <span style={styles.tableCell}>
-                              {new Date(m.date_joined).toLocaleDateString()}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
 
                 {/* Reviews List */}
                 {expandedReviews === group.study_group_id && (
@@ -297,17 +233,7 @@ const styles = {
   noRating: { fontSize: "13px", color: "#bbb" },
   actions: { display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "8px" },
   joinBtn: { padding: "8px 16px", backgroundColor: "#2E4057", color: "white", borderRadius: "6px", textDecoration: "none", fontSize: "13px", fontWeight: "600" },
-  ghostBtn: { padding: "8px 14px", backgroundColor: "transparent", color: "#2E4057", border: "1px solid #E8E4DD", borderRadius: "6px", cursor: "pointer", fontSize: "13px" },
-  // Members table
-  membersSection: { marginTop: "16px", borderTop: "1px solid #E8E4DD", paddingTop: "16px" },
-  membersTitle: { fontSize: "13px", fontWeight: "600", color: "#2E4057", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "12px" },
-  membersTable: { display: "flex", flexDirection: "column", gap: "6px" },
-  tableHeader: { display: "grid", gridTemplateColumns: "1.5fr 2fr 1.2fr 1fr 1fr", gap: "8px", padding: "6px 8px", backgroundColor: "#F5F5F5", borderRadius: "6px", fontSize: "11px", fontWeight: "700", color: "#7A7670", textTransform: "uppercase", letterSpacing: "0.5px" },
-  tableRow: { display: "grid", gridTemplateColumns: "1.5fr 2fr 1.2fr 1fr 1fr", gap: "8px", padding: "10px 8px", backgroundColor: "#FAF8F5", borderRadius: "6px", alignItems: "center" },
-  studentName: { fontSize: "13px", fontWeight: "600", color: "#2E4057" },
-  tableCell: { fontSize: "12px", color: "#7A7670" },
-  tierBadge: { display: "inline-block", padding: "2px 8px", borderRadius: "12px", fontSize: "11px", fontWeight: "600", textAlign: "center" },
-  // Reviews
+  ghostBtn: { padding: "8px 14px", backgroundColor: "transparent", color: "#2E4057", border: "1px solid #E8E4DD", borderRadius: "6px", cursor: "pointer", fontSize: "13px", textDecoration: "none", display: "inline-flex", alignItems: "center" },
   reviewsSection: { marginTop: "16px", borderTop: "1px solid #E8E4DD", paddingTop: "16px" },
   reviewCard: { backgroundColor: "#FAF8F5", borderRadius: "8px", padding: "12px", marginBottom: "8px" },
   reviewStars: { color: "#E8A838", fontSize: "14px", marginBottom: "4px" },
