@@ -171,6 +171,33 @@ class InstitutionByID(Resource):
         db.session.commit()
         return {}, 204
 
+class StudyGroupList(Resource):
+    def get(self):
+        groups = StudyGroup.query.all()
+        return [sg.to_dict() for sg in groups], 200
+
+    def post(self):
+        user = User.query.get(session.get('user_id'))
+        if not user:
+            return {'error': 'Not logged in'}, 401
+        if user.user_category != 'lecturer':
+            return {'error': 'Only lecturers can create groups'}, 403
+        
+        data = request.get_json()
+        try:
+            sg = StudyGroup(
+                name=data['name'],
+                description=data.get('description', ''),
+                subject=data.get('subject', ''),
+                course_id=data['course_id'],
+                owner_user_id=user.user_id
+            )
+            db.session.add(sg)
+            db.session.commit()
+            return sg.to_dict(), 201
+        except Exception as e:
+            return {'error': str(e)}, 422
+
 class ReviewList(Resource):
     def get(self):
         reviews = [n.to_dict() for n in Review.query.all()]
@@ -219,12 +246,15 @@ api.add_resource(InstitutionByID, '/institutions/<int:id>')
 # def index():
 #     return '<h1>Project Server</h1>'
 
-with app.app_context():
-    db.create_all()
-
 @app.errorhandler(404)
 def not_found(e):
     return render_template("index.html")
+
+with app.app_context():
+    db.create_all()
+    if Course.query.count() == 0:
+        from seed import seed_data
+        seed_data()
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

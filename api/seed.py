@@ -5,7 +5,7 @@ from config import db
 from models import User, StudyGroup, Membership, Course, Review, Institution
 from datetime import datetime
 
-with app.app_context():
+def seed_data():
     # Clear existing data
     Review.query.delete()
     Membership.query.delete()
@@ -76,3 +76,8 @@ with app.app_context():
     db.session.commit()
 
     print("Seeded successfully!")
+
+if __name__ == '__main__':
+    from app import app
+    with app.app_context():
+        seed_data()

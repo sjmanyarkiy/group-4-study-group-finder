@@ -22,6 +22,9 @@ function Navbar({ user, onLogout }){
                         <Link to="/register" style={styles.link}>Register</Link>
                     </>
                 )}
+                {user?.user_category === "lecturer" && (
+                  <Link to="/groups/new" style={styles.link}>Create Group</Link>
+                )}
             </div>
         </nav>
     );

@@ -47,7 +47,7 @@ function Memberships({ user }) {
                   {m.tier === "gold" ? "🥇" : m.tier === "silver" ? "🥈" : "🥉"} {m.tier.charAt(0).toUpperCase() + m.tier.slice(1)}
                 </div>
               </div>
-              <h3 style={styles.cardTitle}>{m.name}</h3>
+              <h3 style={styles.cardTitle}>{m.study_group_name || m.name}</h3>
               <div style={styles.cardMeta}>
                 <span style={styles.metaItem}>💰 KES {m.fee}/mo</span>
                 <span style={styles.metaItem}>📅 Joined {new Date(m.date_joined).toLocaleDateString()}</span>
